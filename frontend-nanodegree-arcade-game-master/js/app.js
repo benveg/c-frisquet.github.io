@@ -54,7 +54,7 @@ Menu.prototype.initGame = function () {
     orange.initPosition();
     green.initPosition();
     star.initPosition();
-}
+};
 Menu.prototype.render = function() {
     ctx.font = "30px Arial";
     ctx.fillStyle = "white";
@@ -149,7 +149,7 @@ Menu.prototype.handleInput = function(key) {
             this.inputY -= 1;
         }
         if (key == "down" && this.inputY != 1) {
-            this.inputY += 1
+            this.inputY += 1;
         }
         if (this.inputY == 1) {
             if (key == "enter") {
@@ -282,7 +282,7 @@ var Gem = function(color) {
         this.sprite = 'images/Gem Blue.png';
     }
     if (color == "orange") {
-        this.color = "orange"
+        this.color = "orange";
         this.point = 400;
         this.sprite = 'images/Gem Orange.png';
     }
@@ -334,7 +334,7 @@ var Player = function() {
     this.initLife();
     this.bossFight = false;
     this.sprite = selectedChar;
-    this.heartSprite = 'images/Heart.png'
+    this.heartSprite = 'images/Heart.png';
 };
 // Initialise gems
 Player.prototype.initGems = function() {
@@ -432,6 +432,19 @@ Player.prototype.update = function() {
         this.initLife();
         score = 0;
     }
+
+    if (!player.bossFight) {
+        // Add enemy during a game
+        if (allEnemies.length < enemyNum) {
+            for (i = allEnemies.length; i < enemyNum; i++) {
+                allEnemies.push(new Enemy);
+            }
+        }
+        // Remove enemy during a game
+        if (allEnemies.length > enemyNum) {
+            allEnemies.splice(Enemy, (allEnemies.length - enemyNum));
+        }
+    }
 };
 //Draw the player in the game, the number of life and score
 Player.prototype.render = function() {
@@ -439,7 +452,7 @@ Player.prototype.render = function() {
     for (i = 1; i <= this.life; i++) {
         ctx.drawImage(Resources.get(this.heartSprite), (colNum - i) * colWidth, (enemyRows + 4) * rowHeight);
     }
-    ctx.font = "50px Arial"
+    ctx.font = "50px Arial";
     ctx.fillText("" + score, 0, (enemyRows + 4) * rowHeight + 101);
 };
 //Handle the input of the keyboard to move the player
