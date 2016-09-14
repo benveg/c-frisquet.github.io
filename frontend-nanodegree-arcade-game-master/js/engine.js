@@ -25,7 +25,6 @@ var Engine = (function(global) {
     ctx = canvas.getContext('2d'),
     lastTime;
     canvas.width = colNum * colWidth;
-    //changed the canvas height to include option
     canvas.height = (enemyRows + 5) * colWidth;
     doc.body.appendChild(canvas);
 
@@ -47,9 +46,9 @@ var Engine = (function(global) {
          * our update function since it may be used for smooth animation.
          */
          if (!menu.isUp && !menu.gameRun) {
+              // Delete and recreate the canvas to allow change in colNum and enemyRow
               doc.body.removeChild(canvas)
               canvas.width = colNum * colWidth;
-              //changed the canvas height to include option
               canvas.height = (enemyRows + 5) * colWidth;
               doc.body.appendChild(canvas);
               menu.gameRun = true;
@@ -122,8 +121,9 @@ var Engine = (function(global) {
          * for that particular row of the game level.
          */
         if (menu.gameRun) {
+            /*ctx.clearRect (0, 0, colNum * colWidth, (enemyRows + 5) * colWidth);*/
             var rowImages = [];
-            rowImages.push('images/water-block.png');   // Top row is water to avoid graphical glitch
+            rowImages.push('images/water-block.png');   // Top row is water
             rowImages.push('images/water-block.png');   // Second row is water
             for (i = 1; i <= enemyRows; i++) {
                 rowImages.push('images/stone-block.png');   // Row of stone
@@ -169,6 +169,7 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
+
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });

@@ -19,13 +19,14 @@ var charArray = ['images/char-boy.png',
                 'images/char-horn-girl.png',
                 'images/char-pink-girl.png'];
 var selectedChar = 'images/char-boy.png';
-
+// Just to make the code a bit clearer, build the option of one line
 var optionRender = function (array, index) {
     ctx.textAlign = "left";
     ctx.fillText("Number of " + array[0] + ":", 0, colWidth * (2 * index + 1) - 50);
     for (i = 1; i < array.length ; i++) {
         ctx.fillText('' + array[i], 2 * (i - 1) * colWidth + 50, colWidth * (1 + index * 2) -10);
         ctx.fillRect(2 * (i - 1) * colWidth, (2 * index + 1) * colWidth, colWidth, colWidth);
+        // Red square for the option selected
         if (array[i] == selectedOption[index]) {
             ctx.save();
             ctx.fillStyle = "red";
@@ -44,6 +45,8 @@ var Menu = function() {
     this.inputX = 0;
     this.inputY = 0;
 };
+
+// To reinitialise every entities when the game start, applying change
 Menu.prototype.initGame = function () {
     player.initPosition();
     boss.initPosition();
@@ -101,6 +104,7 @@ Menu.prototype.render = function() {
 };
 
 Menu.prototype.handleInput = function(key) {
+    //menu option input
     if (this.optionUp) {
         if (key == "left" && this.inputX !== 0) {
             this.inputX -= 1;
@@ -122,12 +126,10 @@ Menu.prototype.handleInput = function(key) {
             if (this.inputY == 1) {
                 enemyRows = enemyRowsArray[this.inputX +1];
                 selectedOption[1] = enemyRows;
-                document.getElementsByTagName("canvas").height = (enemyRows + 5) * colWidth;
             }
             if (this.inputY == 2) {
                 colNum = colNumArray[this.inputX + 1];
                 selectedOption[2] = colNum;
-                document.getElementsByTagName("canvas").width = colNum * colWidth;
             }
             if (this.inputY == 3) {
                 this.optionUp = false;
@@ -135,6 +137,7 @@ Menu.prototype.handleInput = function(key) {
             }
         }
     }
+    // menu select character input
     if (!this.optionUp) {
         if (key == "left" && this.input != 3) {
             this.input += 1;
@@ -159,16 +162,14 @@ Menu.prototype.handleInput = function(key) {
     }
 };
 var menu = new Menu();
+
 // Enemies our player must avoid
 
 var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
     this.initPosition();
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
 };
+//Initialise and randomize the position and speed of an enemy
 Enemy.prototype.initPosition = function() {
     this.positionX = - colWidth;
     this.positionY = rowHeight * (Math.floor(Math.random() * enemyRows) + 2) - padding;
@@ -180,7 +181,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-// movement
+// movement X
     if (this.positionX <= colNum * colWidth) {
         this.positionX += this.speed * dt;
     }
@@ -188,7 +189,7 @@ Enemy.prototype.update = function(dt) {
     if (this.positionX > colNum * colWidth) {
         this.initPosition();
     }
-//Anti collision between enemies
+//Anti collision/overlaps between enemies
     for (var i = 0; i < allEnemies.length; i++) {
         if (i != allEnemies.indexOf(this)){
             if (allEnemies[i].positionY == this.positionY) {
@@ -224,13 +225,14 @@ var EnemyBoss = function() {
     this.initPosition();
     this.positionY = rowHeight - padding;
     this.speed = speedMultiplier;
-    this.sprite = 'images/char-princess-girl.png'
+    this.sprite = 'images/char-princess-girl.png';
 };
 EnemyBoss.prototype.initPosition = function() {
     this.positionX = Math.floor(colNum / 2) * colWidth;
 };
 
 EnemyBoss.prototype.update = function(dt) {
+    // To follow the player positionX
     if (this.positionX < player.positionX) {
         this.positionX += this.speed * dt;
     }
@@ -259,6 +261,7 @@ EnemyStar.prototype.update = function(dt) {
     if (this.positionY >= (enemyRows + 3) * rowHeight - padding) {
         this.initPosition();
     }
+    // collision on x and y
     if (this.positionX <= player.positionX + 50 && this.positionX >= player.positionX - 50) {
         if (this.positionY <= player.positionY + 50 && this.positionY >= player.positionY - 50) {
             this.initPosition();
@@ -270,7 +273,7 @@ EnemyStar.prototype.update = function(dt) {
 EnemyStar.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.positionX, this.positionY);
 };
-// Gem to grab to win
+// Gem to grab to improve score
 var Gem = function(color) {
     this.positionY = rowHeight - padding;
     if (color == "blue") {
@@ -289,7 +292,8 @@ var Gem = function(color) {
         this.sprite = 'images/Gem Green.png';
     }
 };
-
+// Initialise position given color, and bring the boolean notCollected to not allow the player to get extra score
+// by passing multiple time at the gem position
 Gem.prototype.initPosition = function(color) {
     if (this.color == "blue") {
         this.positionX = Math.floor((Math.random() + 1) * (colNum / 3)) * colWidth;
@@ -385,6 +389,7 @@ Player.prototype.update = function() {
             green.notCollected = false;
             this.gemCount += 1;
         }
+        // During boss fight, win only occur if the player goes on the boss
         if (this.bossFight) {
             if (this.positionX <= boss.positionX + 50 && this.positionX >= boss.positionX - 50) {
                 this.initPosition();
@@ -401,7 +406,8 @@ Player.prototype.update = function() {
         this.initPosition();
 
     }
-// enemy collision
+// enemy collision, the +50 and -50 is for the actual size of enemy (101) so that there is collision based on the
+// appearance rather than the position
     for (var i = 0; i < allEnemies.length; i++) {
         if (allEnemies[i].positionY == this.positionY && allEnemies[i] != boss) {
             if (this.positionX <= allEnemies[i].positionX + 50 && this.positionX >= allEnemies[i].positionX - 50) {
@@ -414,6 +420,9 @@ Player.prototype.update = function() {
     if (this.gemCount == 3) {
         this.bossFight = true;
         this.gemCount = 0;
+        //Reinitialise the position of the boss
+        boss.initPosition();
+        star.initPosition();
         allEnemies.push(boss);
         allEnemies.push(star);
 
@@ -476,9 +485,11 @@ document.addEventListener('keyup', function(e) {
         40: 'down',
         13: 'enter'
     };
+    // to make sure nothing is changed before the game start
     if (!menu.isUp) {
         player.handleInput(allowedKeys[e.keyCode]);
     }
+    // to make sure nothing is changed after the game start
     if (menu.isUp) {
         menu.handleInput(allowedKeys[e.keyCode]);
     }
