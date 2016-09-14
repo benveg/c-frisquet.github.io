@@ -433,7 +433,7 @@ Player.prototype.update = function() {
         score = 0;
     }
 
-    if (!player.bossFight) {
+    if (!this.bossFight) {
         // Add enemy during a game
         if (allEnemies.length < enemyNum) {
             for (i = allEnemies.length; i < enemyNum; i++) {
