@@ -484,7 +484,7 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // make updatePositions work with a requestAnimationFrame
 var initiateScroll = 0;
 function isScrolled() {
-    var scrollValue = document.body.scrollTop / 1250
+    var scrollValue = document.body.scrollTop / 1250;
     if (initiateScroll != scrollValue) {
         initiateScroll = scrollValue;
         requestAnimationFrame(updatePositions);
@@ -498,9 +498,12 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
   var items = document.querySelectorAll('.mover');
+  var phase = [];
+  for (var i = 0; i < 5; i++) {
+    phase.push(Math.sin(initiateScroll + (i % 5)));
+  }
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin(initiateScroll + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    items[i].style.transform = 'translateX(' + 100 * phase[i % 5] + 'px)';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -527,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
-    elem.basicLeft = (i % cols) * s;
+    elem.style.left = (i % cols) * s + 'px';
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
   }

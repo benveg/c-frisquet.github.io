@@ -30,6 +30,8 @@ Some useful tips to help you get started:
 
 Profile, optimize, measure... and then lather, rinse, and repeat. Good luck!
 
+
+
 ####Part 2: Optimize Frames per Second in pizza.html
 
 To optimize views/pizza.html, you will need to modify views/js/main.js until your frames per second rate is 60 fps or higher. You will find instructive comments in main.js. 
@@ -53,3 +55,31 @@ The portfolio was built on Twitter's <a href="http://getbootstrap.com/">Bootstra
 
 * <a href="http://getbootstrap.com/css/">Bootstrap's CSS Classes</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap's Components</a>
+
+### Work done to optimize
+
+#### Setup
+
+To setup, move to the directory and do:
+``` npm install```
+``` gulp build```
+
+#### index.html
+
+To optimize the index.html so that [pagespeed](https://developers.google.com/speed/pagespeed/insights/) show a score of 90+ in both mobile and desktop device, i had to do those modifications:
+
+* Setup gulp to make a minified version of html/css/js
+* Move all script at the bottom and make them async
+* Added a media to the link for the print.css
+* Imported the font in style.css with @font-face
+
+Althoug there is still a problem with google analytics, it seems to be more of a server side issue than a front issue.
+You can test index.html by going [here](https://c-frisquet.github.io/frontend-nanodegree-mobile-portfolio-master/dist/index.html).
+
+#### main.js
+
+To optimize the main.js so that the webpage run at 60 fps, i had  to do those modifications:
+
+* Changed resizePizzas to use a switch rather than a weird dx, and moved the queryselector outside of the loop
+* Changed updatePositions with a translate rather than left, made a requestAnimationFrame, and made an array storring the 5 possible phase value (as it is a modulo 5)
+* Reduced the amount of moving pizza to a more reasonable number
