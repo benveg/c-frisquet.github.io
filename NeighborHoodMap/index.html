@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+        <title>Trappist Beer Neighborhood</title>
+    </head>
+
+    <body>
+        <div class="container">
+            <nav class="menu">
+                <input class="search" placeholder="Search" data-bind="value: keyword, valueUpdate: 'afterkeydown'"/>
+                <ul class="brasseriesContainer" data-bind="foreach: brasseries">
+                    <li class="brasserie" data-bind="if: display, click: $data.openInfoWindow">
+                        <h2 data-bind="text: name"></h2>
+                    </li>
+                </ul>
+            </nav>
+            <div id="map"></div>
+        </div>
+    <script type="text/javascript" src="common.js"></script><script type="text/javascript" src="bundle.js"></script></body>
+</html>
