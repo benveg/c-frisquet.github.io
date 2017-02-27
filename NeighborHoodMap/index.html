@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-type" content="text/html"/>
+        <meta name="viewport" content="width=device-width"/>
         <title>Trappist Beer Neighborhood</title>
     </head>
 
     <body>
-        <div class="container">
+        <main class="container">
             <nav class="menu">
                 <input class="search" placeholder="Search" data-bind="value: keyword, valueUpdate: 'afterkeydown'"/>
                 <ul class="brasseriesContainer" data-bind="foreach: brasseries">
@@ -16,6 +18,13 @@
                 </ul>
             </nav>
             <div id="map"></div>
-        </div>
+            <script>
+                function mapError() {
+                    alert("Sorry we haven't been able to call Google Maps, please try again later.");
+                }
+            </script>
+            <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBdHx7GHO_zFqjqJ6zY-gIfb9SLIuZ7A6k&callback=initMap"
+            async defer onerror="mapError()"></script>
+        </main>
     <script type="text/javascript" src="common.js"></script><script type="text/javascript" src="bundle.js"></script></body>
 </html>
